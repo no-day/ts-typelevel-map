@@ -95,7 +95,10 @@ type Delete_<K, D> = D extends [[infer k, infer v], ...infer tail]
     : [[k, v], ...Delete_<K, tail>]
   : []
 
-type Exists<K extends KeyOf<M>, M extends Map> = Exists_<K, ToEntries<M>>
+type InternalExists<K extends KeyOf<M>, M extends Map> = Exists_<
+  K,
+  ToEntries<M>
+>
 
 type Exists_<K, D extends MapEntry[]> = Not<Is<Lookup_<K, D>, unknown>>
 
@@ -141,7 +144,7 @@ type InternalToEntries<M extends Map> = M['data']
  *
  * @category Constructors
  * @example
- *   import { Empty, ToEntries } from 'ts-typelevel-maps'
+ *   import { Empty, ToEntries } from 'ts-typelevel-map'
  *   import { assert as typeAssert, IsExact } from 'conditional-type-checks'
  *
  *   typeAssert<IsExact<ToEntries<Empty>, []>>(true)
@@ -153,7 +156,7 @@ export type Empty<K = any, V = any> = InternalEmpty<K, V>
  *
  * @category Constructors
  * @example
- *   import { ToEntries, FromEntries } from 'ts-typelevel-maps'
+ *   import { ToEntries, FromEntries } from 'ts-typelevel-map'
  *   import { assert as typeAssert, IsExact } from 'conditional-type-checks'
  *
  *   type M = FromEntries<[[1, 'A'], [2, 'B'], [3, 'C']]>
@@ -185,7 +188,7 @@ export type Error<M extends string, D> = {
  *
  * @category Utils
  * @example
- *   import { ToEntries, Upsert, FromEntries } from 'ts-typelevel-maps'
+ *   import { ToEntries, Upsert, FromEntries } from 'ts-typelevel-map'
  *   import { assert as typeAssert, IsExact } from 'conditional-type-checks'
  *
  *   type M = FromEntries<[[1, 'A'], [2, 'B'], [3, 'C']]>
@@ -205,14 +208,14 @@ export type Upsert<
 > = InternalUpsert<K, V, M>
 
 /**
- * TODO
+ * Tries to lookup a key from a Map and return the value
  *
  * @category Utils
  */
 export type Lookup<K extends KeyOf<M>, M extends Map> = InternalLookup<K, M>
 
 /**
- * TODO
+ * Deltes a key value pair from a map
  *
  * @category Utils
  */
@@ -238,3 +241,10 @@ export type ValOf<M extends Map> = InternalValOf<M>
  * @category Utils
  */
 export type ToEntries<M extends Map> = InternalToEntries<M>
+
+/**
+ * Checks if a key exists in a Map
+ *
+ * @category Utils
+ */
+export type Exists<K extends KeyOf<M>, M extends Map> = InternalExists<K, M>
