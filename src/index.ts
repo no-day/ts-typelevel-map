@@ -215,7 +215,7 @@ export type Upsert<
 export type Lookup<K extends KeyOf<M>, M extends Map> = InternalLookup<K, M>
 
 /**
- * Deltes a key value pair from a map
+ * Deletes a key value pair from a map
  *
  * @category Utils
  */
