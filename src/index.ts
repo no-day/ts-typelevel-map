@@ -40,12 +40,6 @@ type Is<T, G> = T extends G ? (G extends T ? true : false) : false
 
 type Not<T extends boolean> = T extends true ? false : true
 
-type Insert<
-  K extends KeyOf<M>,
-  V extends ValOf<M>,
-  M extends Map
-> = InternalInsert<K, V, M>
-
 type InternalInsert<
   K extends KeyOf<M>,
   V extends ValOf<M>,
@@ -177,7 +171,7 @@ export type FromEntries<
  *
  * @category Utils
  */
-export type Error<M extends string, D> = {
+export type Error<M extends string = string, D = any> = {
   readonly Error: unique symbol
   message: M
   data: D
@@ -206,6 +200,34 @@ export type Upsert<
   V extends ValOf<M>,
   M extends Map
 > = InternalUpsert<K, V, M>
+
+/**
+ * Insert a key value pair in a Map
+ *
+ * @category Utils
+ * @example
+ *   import { ToEntries, Insert, FromEntries, Error } from 'ts-typelevel-map'
+ *   import {
+ *     assert as typeAssert,
+ *     IsExact,
+ *     Has,
+ *   } from 'conditional-type-checks'
+ *
+ *   type M = FromEntries<[[1, 'A'], [2, 'B'], [3, 'C']]>
+ *   type M1 = Insert<0, 'Z', M>
+ *   type M2 = Insert<1, 'AA', M>
+ *
+ *   typeAssert<
+ *     IsExact<ToEntries<M1>, [[0, 'Z'], [1, 'A'], [2, 'B'], [3, 'C']]>
+ *   >(true)
+ *
+ *   typeAssert<Has<M2, Error>>(true)
+ */
+export type Insert<
+  K extends KeyOf<M>,
+  V extends ValOf<M>,
+  M extends Map
+> = InternalInsert<K, V, M>
 
 /**
  * Tries to lookup a key from a Map and return the value
